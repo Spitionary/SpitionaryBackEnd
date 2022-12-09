@@ -14,18 +14,4 @@ router.get("/", (req, res) => {
 router.post("/register", UserController.register);
 router.post("/login", UserController.login);
 
-// dictionary of spice
-router.get(
-  "/spices",
-  passport.authenticate("jwt", { session: false }),
-  SpiceController.all
-);
-
-// scan image
-router.post(
-  "/spices/scan",
-  passport.authenticate("jwt", { session: false }),
-  SpiceController.scan
-);
-
 module.exports = router;
