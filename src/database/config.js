@@ -1,4 +1,4 @@
-const { Sequelize } = require("sequelize");
+import { Sequelize } from "sequelize";
 
 // socketpath value
 let socketPath =
@@ -26,11 +26,4 @@ const dbConnection = new Sequelize(
   }
 );
 
-/**
- * create and drop database
- * for testing
- */
-// dbConnection.sync({});
-// dbConnection.sync({ force: true });
-
-module.exports = dbConnection;
+export default dbConnection;

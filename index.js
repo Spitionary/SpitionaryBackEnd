@@ -1,9 +1,9 @@
 require("dotenv").config();
-const express = require("express");
+import express, { json, urlencoded } from "express";
 const app = express();
-const cors = require("cors");
-const passport = require("passport");
-const routes = require("./src/routes/routes");
+import cors from "cors";
+import { initialize } from "passport";
+import routes from "./src/routes/routes";
 
 app.disable("x-powered-by");
 
@@ -11,13 +11,13 @@ app.disable("x-powered-by");
 app.use(cors());
 
 // use passport
-app.use(passport.initialize());
+app.use(initialize());
 
 // parse requests of json
-app.use(express.json());
+app.use(json());
 
 // parse requests of body on form data
-app.use(express.urlencoded({ extended: true }));
+app.use(urlencoded({ extended: true }));
 
 // define routes
 app.use("/", routes);

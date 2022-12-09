@@ -1,15 +1,15 @@
-const bcryptjs = require("bcryptjs");
-const Joi = require("joi");
-const jwt = require("jsonwebtoken");
-const User = require("../model/user");
-const salt = bcryptjs.genSaltSync(10);
+import { genSaltSync, compareSync, hashSync } from "bcryptjs";
+import { object, string } from "joi";
+import { sign } from "jsonwebtoken";
+import { findOne, findOrCreate } from "../model/user";
+const salt = genSaltSync(10);
 
 const login = async (req, res) => {
   try {
     // validation form data
-    const rules = Joi.object({
-      email: Joi.string().email().max(50).required(),
-      password: Joi.string().min(8).required(),
+    const rules = object({
+      email: string().email().max(50).required(),
+      password: string().min(8).required(),
     });
     const { error } = rules.validate(req.body);
 
@@ -24,7 +24,7 @@ const login = async (req, res) => {
     const { email, password } = req.body;
 
     // find user data
-    const user = await User.findOne({
+    const user = await findOne({
       attributes: [["id", "userId"], "username", "email", "password"],
       where: {
         email: email,
@@ -32,9 +32,9 @@ const login = async (req, res) => {
     });
 
     // if user found and password are equals
-    if (user && bcryptjs.compareSync(password, user.password)) {
+    if (user && compareSync(password, user.password)) {
       // generate token
-      const token = jwt.sign(
+      const token = sign(
         { _id: user.getDataValue("userId") },
         process.env.SECRET_KEY
       );
@@ -72,10 +72,10 @@ const login = async (req, res) => {
 const register = async (req, res) => {
   try {
     // validation form data
-    const rules = Joi.object({
-      username: Joi.string().max(50).required(),
-      email: Joi.string().email().max(50).required(),
-      password: Joi.string().min(8).required(),
+    const rules = object({
+      username: string().max(50).required(),
+      email: string().email().max(50).required(),
+      password: string().min(8).required(),
     });
     const { error } = rules.validate(req.body);
 
@@ -92,11 +92,11 @@ const register = async (req, res) => {
     const updated_at = created_at;
 
     // find or create user
-    const [user, created] = await User.findOrCreate({
+    const [user, created] = await findOrCreate({
       where: { email: email },
       defaults: {
         username: username,
-        password: bcryptjs.hashSync(password, salt),
+        password: hashSync(password, salt),
         created_at: created_at,
         updated_at: updated_at,
       },
@@ -121,4 +121,4 @@ const register = async (req, res) => {
   }
 };
 
-module.exports = { register, login };
+export default { register, login };
