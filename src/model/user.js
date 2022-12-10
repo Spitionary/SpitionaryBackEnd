@@ -1,4 +1,5 @@
-const dbConnection = require("../database/config").default;
+const { DataTypes } = require("sequelize");
+const dbConnection = require("../database/config");
 
 const user = dbConnection.define(
   "user",

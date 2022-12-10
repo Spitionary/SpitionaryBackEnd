@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const UserController = require("../controller/userController").default;
+const passport = require("passport");
+const UserController = require("../controller/userController");
 require("../middleware/auth");
 
 // welcome api

@@ -1,4 +1,4 @@
-import { Sequelize } from "sequelize";
+const { Sequelize } = require("sequelize");
 
 // socketpath value
 let socketPath =
@@ -13,7 +13,7 @@ const dbConnection = new Sequelize(
   process.env.DB_PASSWORD,
   {
     host: process.env.DB_HOST,
-    dialect: process.env.DB_DIALECT,
+    dialect: "mysql",
     dialectOptions: {
       socketPath: socketPath,
     },
@@ -26,4 +26,11 @@ const dbConnection = new Sequelize(
   }
 );
 
-export default dbConnection;
+/**
+ * create and drop database
+ * for testing
+ */
+// dbConnection.sync({});
+// dbConnection.sync({ force: true });
+
+module.exports = dbConnection;

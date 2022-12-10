@@ -1,16 +1,17 @@
-import { findOne } from "../model/user";
-import { use } from "passport";
-import { Strategy as JwtStrategy } from "passport-jwt";
-import { ExtractJwt } from "passport-jwt";
+const User = require("../model/user");
+const passport = require("passport");
+const jwt = require("jsonwebtoken");
+const JwtStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
 
 const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = process.env.SECRET_KEY;
+opts.secretOrKey = "asdsadwf231";
 
 // verified bearer token
-use(
+passport.use(
   new JwtStrategy(opts, function (jwt_payload, done) {
-    findOne({
+    User.findOne({
       attributes: ["id", "username", "email"],
       where: {
         id: jwt_payload._id,
